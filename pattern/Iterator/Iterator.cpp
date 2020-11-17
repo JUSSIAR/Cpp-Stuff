@@ -88,7 +88,7 @@ class array {
 
 namespace test {
     void test_case_iterator() {
-		std::cout << std::endl << "test_case_iterator\n" << std::endl;		
+	std::cout << std::endl << "test_case_iterator\n" << std::endl;		
         
         array<int, 4> a = {1, 2, 3, 4}; 
         for (auto it = a.begin(); it != a.end(); it++)
@@ -100,7 +100,7 @@ namespace test {
 
 int main()
 {   	
-	  test::test_case_iterator();	
+    test::test_case_iterator();	
 
     return 0;
 }
