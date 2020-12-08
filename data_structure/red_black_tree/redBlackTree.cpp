@@ -217,13 +217,61 @@ private:
     }
 
     void __left_rotate__(Node* node) {
-        
+        Node* left = node->left;
+        Node* right = node->right;
+        Node* ch1 = right->left;
+        Node* ch2 = right->right;
+        Node* par = node->parent;
+        /* for_rigth */ {
+            right->left = node;
+            right->parent = par;
+        }
+        /* for_node */ {
+            node->parent = right;
+            node->right = ch1;
+        }
+        /* for_par */ {
+            if (par != nullptr) {
+                if (par->left == node)
+                    par->left = right;
+                else
+                    par->right = right;
+            }
+        }
+        /* for_ch1 */ {
+            if (ch1 != nullptr) {
+                ch1->par = node;
+            }
+        }
     }
 
     void __right_rotate__(Node* node) {
-        Node* NewNode = node->left;
-        Node* Parent = node;
-        Node* NodeLeft = nullptr;
+        Node* left = node->left;
+        Node* right = node->right;
+        Node* ch1 = left->left;
+        Node* ch2 = left->right;
+        Node* par = node->parent;
+        /* for_left */ {
+            left->right = node;
+            left->parent = par;
+        }
+        /* for_node */ {
+            node->parent = left;
+            node->left = ch2;
+        }
+        /* for_par */ {
+            if (par != nullptr) {
+                if (par->left == node)
+                    par->left = left;
+                else
+                    par->right = left;
+            }
+        }
+        /* for_ch2 */ {
+            if (ch2 != nullptr) {
+                ch2->par = node;
+            }
+        }
     }
 
     Node* __inside__(Node* node) {
@@ -275,19 +323,18 @@ private:
 
 
 namespace test {
-    void test_case_iterator() {
-		std::cout << std::endl << "test_case_map\n" << std::endl;		
+    inline void test_case_map() {
+        std::cout << std::endl << "test_case_map\n" << std::endl;		
         
-        
+        Map<int, std::string> myMap;
 
         std::cout << std::endl << "[---OK---]" << std::endl;
     }
 }
 
 int main()
-{   	
-	test::test_case_iterator();	
-
+{
+    test::test_case_map();
     return 0;
 }
 
