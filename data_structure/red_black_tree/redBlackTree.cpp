@@ -106,6 +106,15 @@ public:
         tail->prev = head;
     }
 
+    Iterator Find(const key_type& k) {
+        return __find__(root, k);
+    }
+
+    map_type& operator[](const key_type& k) {
+        std::pair<Iterator, bool> p = Insert(std::make_pair(k, map_type()));
+        return p.first->val.second;
+    }
+
     std::pair<Iterator, bool> Insert(const value_type& v) {
         Node* NewNode = new Node(v);
         std::pair<Iterator, bool> p = __Recursive_insert__(root, NewNode);
@@ -120,6 +129,16 @@ public:
         return p;
     }
 
+    size_t Erase(const key_type& k) {
+        Iterator it = __find__(root, k);
+        if (it == end())
+            return 0;
+        Node* v_min = Get_smallval_node(it->right);
+        std::swap(v_min->val, it->val);
+        __replace_node__(v_min, v_min->right);
+        Remove(v_min);
+    }
+
 private:
 
     Node* root;
@@ -127,6 +146,103 @@ private:
     Node* tail;
 
 private:
+
+    void Remove(Node* node) {
+        Node* child = node->right;
+        __replace_node__(node, node->right);
+        if (node->color == Color::BLACK && child->color == Color::RED) {
+            child->color = Color::Red;
+        } else if (node->color == Color::RED && child->color == Color::BLACK) {
+            // no any actions
+        } else {
+            
+        }
+        delete node;
+    }
+
+    void __remove_repair_tree__(Node* node) {
+        if (node->parent == nullptr) return;
+        
+        //__remove_case_1__(node);
+
+    }
+
+    void __remove_case_1__(Node* node) {
+        Node* s = Get_Sibling(node);
+        Node* sl = s->left;
+        Node* sr = s->right;
+
+        if (sl->color == Color::BLACK && sr->color == Color::BLACK &&
+            node->parent->color == Color::BLACK && s->color == Color::RED) 
+        {
+            node->parent->color = Color::RED;
+            s->color = Color::BLACK;
+            if (node->parent->left != nullptr) {
+                __left_rotate__(node->parent);
+            } else {
+                __right_rotate__(node->parent);
+            }
+        }
+        __remove_case_2__(node);
+    }
+
+    void __remove_case_2__(Node* node) {
+        Node* s = Get_Sibling(node);
+        Node* sl = s->left;
+        Node* sr = s->right;
+
+        if (sl->color == Color::BLACK && sr->color == Color::BLACK &&
+            node->parent->color == Color::BLACK && s->color == Color::BLACK) 
+        {
+            s->color = Color::RED;
+            __remove_repair_tree__(node);
+        }
+        __remove_case_3__(node);
+    }
+
+    void __remove_case_3__(Node* node) {
+        Node* s = Get_Sibling(node);
+        Node* sl = s->left;
+        Node* sr = s->right;
+
+        if (sl->color == Color::BLACK && sr->color == Color::BLACK &&
+            node->parent->color == Color::RED && s->color == Color::BLACK) 
+        {
+            std::swap(node->parent->color, s->color);
+        }
+        __remove_case_4__(node);
+    }
+
+    void __remove_case_4__(Node* node) {
+        //__remove_case_4__
+    }
+
+    void __remove_case_5__(Node* node) {
+        //__remove_case_5__
+    }
+
+    void __remove_case_6__(Node* node) {
+        //__remove_case_6__
+    }
+
+    void __replace_node__(Node* node, Node* child) {
+        child->parent = node->parent;
+        if (node == node->parent->left)
+            node->parent->left = child;
+        else
+            node->parent->right = child;
+    }
+
+    Iterator __find__(Node* cur, const key_type& k) {        
+        if (cur == nullptr)
+            return end();        
+        if (cur->val.first == k)
+            return Iterator(cur);
+        else if (k < cur->val.first)
+            return __find__(cur->left, k);
+        else
+            return __find__(cur->right, k);
+    }
 
     Node* Get_parent(Node* temp_vert) {
         return (temp_vert == nullptr) ? nullptr : temp_vert->parent;
@@ -329,22 +445,56 @@ private:
 
 namespace test {
     inline void test_case_map() {
-        std::cout << std::endl << "test_case_map\n" << std::endl;		
+        std::cout << std::endl << "test_case_map\n" << std::endl;	
+
+
+        /*
+            this version has memory leaks
+        */	
         
         Map<int, std::string> myMap;
 
-        myMap.Insert(std::make_pair(1, "a"));
-        myMap.Insert(std::make_pair(3, "b"));
-        myMap.Insert(std::make_pair(2, "c"));
-        myMap.Insert(std::make_pair(5, "d"));
-        myMap.Insert(std::make_pair(-7, "e"));
+        auto r1 = myMap.Insert(std::make_pair(1, "a"));
+        long_operation(1);
+        std::cout << r1.second << "added 1" << std::endl;
 
+        auto r2 = myMap.Insert(std::make_pair(3, "b"));
+        long_operation(1);
+        std::cout << r2.second << "added 2" << std::endl;
+
+        auto r3 = myMap.Insert(std::make_pair(2, "c"));
+        long_operation(1);
+        std::cout << r3.second << "added 3" << std::endl;
+
+        auto r4 = myMap.Insert(std::make_pair(5, "d"));
+        long_operation(1);
+        std::cout << r4.second << "added 4" << std::endl;
+
+        auto r5 = myMap.Insert(std::make_pair(-7, "e"));
+        long_operation(1);
+        std::cout << r5.second << "added 5" << std::endl;
+
+
+        std::cout << "\n\n\n" << std::endl;
+        long_operation(2);
         for (Map<int, std::string>::Iterator it = myMap.begin();
             it != myMap.end(); it++) {
-                std::cout << it->val.second << '\n';
+                std::cout << it->val.second << '\t';
             }
-        std::cout << std::endl;
+        std::cout << '\n';
+        std::cout << "out tested\n\n" << std::endl; 
 
+        std::cout << "value on key 3 is ";
+        long_operation(1);
+        std::cout << myMap[3] << std::endl;
+
+        // long_operation(1);
+        // myMap[25] = "abacaba";
+        // std::cout << "added new key 25 with value ";
+        // std::cout << myMap[25] << "\n\n\n" << std::endl;
+        
+        
+        long_operation(2);
         std::cout << std::endl << "[---OK---]" << std::endl;
     }
 }
