@@ -11,8 +11,6 @@
 
 void long_operation(int kol_sec);
 
-
-
 template <typename key, typename value> 
 class Map {
 
@@ -99,6 +97,13 @@ public:
     }
     Iterator end() {
         return tail;
+    }
+
+    Map() : root(nullptr) {
+        head = new Node();
+        tail = new Node();
+        head->next = tail;
+        tail->prev = head;
     }
 
     std::pair<Iterator, bool> Insert(const value_type& v) {
@@ -333,6 +338,12 @@ namespace test {
         myMap.Insert(std::make_pair(2, "c"));
         myMap.Insert(std::make_pair(5, "d"));
         myMap.Insert(std::make_pair(-7, "e"));
+
+        for (Map<int, std::string>::Iterator it = myMap.begin();
+            it != myMap.end(); it++) {
+                std::cout << it->val.second << '\n';
+            }
+        std::cout << std::endl;
 
         std::cout << std::endl << "[---OK---]" << std::endl;
     }
