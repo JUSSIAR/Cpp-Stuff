@@ -240,7 +240,7 @@ private:
         }
         /* for_ch1 */ {
             if (ch1 != nullptr) {
-                ch1->par = node;
+                ch1->parent = node;
             }
         }
     }
@@ -269,7 +269,7 @@ private:
         }
         /* for_ch2 */ {
             if (ch2 != nullptr) {
-                ch2->par = node;
+                ch2->parent = node;
             }
         }
     }
@@ -279,7 +279,7 @@ private:
         auto P = Get_parent(node);
         if (GP == nullptr)
             return node;
-        if (GP->left == P && P->rigth == node) {
+        if (GP->left == P && P->right == node) {
             __left_rotate__(P);
             node = node->left;
         }
@@ -327,6 +327,12 @@ namespace test {
         std::cout << std::endl << "test_case_map\n" << std::endl;		
         
         Map<int, std::string> myMap;
+
+        myMap.Insert(std::make_pair(1, "a"));
+        myMap.Insert(std::make_pair(3, "b"));
+        myMap.Insert(std::make_pair(2, "c"));
+        myMap.Insert(std::make_pair(5, "d"));
+        myMap.Insert(std::make_pair(-7, "e"));
 
         std::cout << std::endl << "[---OK---]" << std::endl;
     }
