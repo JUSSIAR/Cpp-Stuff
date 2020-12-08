@@ -1,3 +1,3 @@
-# HSE
+# C++ 
 
-my works during studying
+my works and practice during studying HSE
