@@ -11,9 +11,9 @@
 
 ### For using this structure
 - #include 
--- iostream
--- vector
--- algorithm
+- - iostream
+- - vector
+- - algorithm
 - using std::vector;
 - using std::size_t;
 - using std::sort;
