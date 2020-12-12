@@ -1,10 +1,10 @@
 # Red-Black Tree realization
 
 ### Table of contents
-* [General info](#general)
+* [General info](#general-info)
 * [Technologies](#technologies)
 * [Setup](#setup)
-* [Build and Run](#build)
+* [Build and Run](#build-and-run)
 
 # General info
 This code illustrates:
