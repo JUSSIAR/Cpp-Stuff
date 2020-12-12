@@ -10,9 +10,10 @@
 - template structure
 
 ### For using this structure
-- #include <iostream>
-- #include <vector>
-- #include <algorithm>
+- #include 
+-- iostream
+-- vector
+-- algorithm
 - using std::vector;
 - using std::size_t;
 - using std::sort;
