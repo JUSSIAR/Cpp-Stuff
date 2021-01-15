@@ -8,10 +8,11 @@
 namespace my_std {
     template <typename Key, typename Type, typename Hash=std::hash<Key>>
     class unordered_map {
-        public:
+        protected:
             using key_type = Key;
             using map_type = Type;
             using value_type = std::pair<Key, Type>;
+        private:
             struct Node {
                 value_type value;
                 Node* next;
@@ -21,10 +22,11 @@ namespace my_std {
                 Node(value_type _value) : value(_value) {}
                 ~Node() = default;
             };
+        public:
             unordered_map(std::size_t backet_count = 100) : table(backet_count) {
-                head->next = &tail;
-                tail->prev = &head;
-                size = 0;
+                head.next = &tail;
+                tail.prev = &head;
+                _size = 0;
             }
             class iterator {
                 public:
@@ -45,13 +47,13 @@ namespace my_std {
                         return ptr == other.ptr;
                     }
                     bool operator!=(const iterator& other) const {
-                        return !operator==();
+                        return !operator==(other);
                     }
                     value_type operator*() {
-                        return ptr->value_type;
+                        return ptr->value;
                     }
                     value_type* operator->() {
-                        return &(ptr->value_type);
+                        return &(ptr->value);
                     }
                 private:
                     Node* ptr;
@@ -75,7 +77,7 @@ namespace my_std {
                 _max_load_factor = new_mlf;
             }
             iterator begin() {
-                return head->next;
+                return head.next;
             }
             iterator end() {
                 return &tail;
@@ -104,7 +106,9 @@ namespace my_std {
                 
             // } 
         private:
-            Node* get_next(std::size_t pos, std::list<Node>::iterator iter) {
+            //Node* get_next(std::size_t pos, std::list<Node>::iterator iter) {
+            template <typename some_iterator>
+            Node* get_next(std::size_t pos, some_iterator iter) {
                 if (++iter != table[pos++].end())
                     return &(*iter);
                 while (pos < bucket_count() && table[pos].empty())
@@ -112,8 +116,11 @@ namespace my_std {
                 if (pos == bucket_count())
                     return &tail;
                 return &table[pos].front();
+                return new Node();
             }
-            Node* get_prev(std::size_t pos, std::list<Node>::iterator iter) {
+            //Node* get_prev(std::size_t pos, std::list<Node>::iterator iter) {
+            template <typename some_iterator>
+            Node* get_prev(std::size_t pos, some_iterator iter) {
                 if (iter != table[pos].begin())
                     return &(*(--iter));
                 while (pos >= 1 && table[pos - 1].empty())
@@ -121,6 +128,7 @@ namespace my_std {
                 if (pos == 0)
                     return &head;
                 return &table[pos - 1].back();
+                return new Node();
             }
             float _max_load_factor = 290;
             std::size_t _size;
@@ -134,6 +142,7 @@ namespace my_std {
 namespace test {
 
     inline void test_case1() {
+
         my_std::unordered_map<int, std::string> my_map;
         my_map.insert(std::make_pair(1, "a"));
         my_map.insert(std::make_pair(2, "b"));
@@ -143,6 +152,7 @@ namespace test {
             std::cout << it->second << '\t';
         }
         std::cout << std::endl << "OK" << std::endl;
+        
     }
     
 }
