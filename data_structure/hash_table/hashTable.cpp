@@ -116,7 +116,6 @@ namespace my_std {
                 if (pos == bucket_count())
                     return &tail;
                 return &table[pos].front();
-                return new Node();
             }
             //Node* get_prev(std::size_t pos, std::list<Node>::iterator iter) {
             template <typename some_iterator>
@@ -128,7 +127,6 @@ namespace my_std {
                 if (pos == 0)
                     return &head;
                 return &table[pos - 1].back();
-                return new Node();
             }
             float _max_load_factor = 290;
             std::size_t _size;
@@ -152,7 +150,7 @@ namespace test {
             std::cout << it->second << '\t';
         }
         std::cout << std::endl << "OK" << std::endl;
-        
+
     }
     
 }
