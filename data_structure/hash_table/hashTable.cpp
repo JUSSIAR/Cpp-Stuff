@@ -106,7 +106,7 @@ namespace my_std {
                 
             // } 
         private:
-            //Node* get_next(std::size_t pos, std::list<Node>::iterator iter) {
+            //Node* get_next(std::size_t pos, typename std::list<Node>::iterator iter) {
             template <typename some_iterator>
             Node* get_next(std::size_t pos, some_iterator iter) {
                 if (++iter != table[pos++].end())
@@ -117,7 +117,7 @@ namespace my_std {
                     return &tail;
                 return &table[pos].front();
             }
-            //Node* get_prev(std::size_t pos, std::list<Node>::iterator iter) {
+            //Node* get_prev(std::size_t pos, typename std::list<Node>::iterator iter) {
             template <typename some_iterator>
             Node* get_prev(std::size_t pos, some_iterator iter) {
                 if (iter != table[pos].begin())
